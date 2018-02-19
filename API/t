@@ -1,4 +1,5 @@
 --Custom turtle API
+--Version 0.0.1
  
 function help()
   term.write("Bunny Turtle API || Page 1/1")
@@ -32,6 +33,8 @@ function df() -- dig forward
     turtle.dig()
   end
   turtle.forward()
+  loc.forward()
+  loc.display()
 end
  
 function du() -- dig up
@@ -39,25 +42,38 @@ function du() -- dig up
     turtle.digUp()
   end
   blocked = turtle.up()
+  loc.up()
+  loc.display()
+ 
   return blocked
 end
  
 function dd() -- dig down
   turtle.digDown()
   turtle.down()
+  loc.down()
+  loc.display()
 end
  
 function re() --right elbow turn
 --right, forward, right
   turtle.turnRight()
+  loc.right()
   df() --dig forward
+  loc.forward()
   turtle.turnRight()
+  loc.right()
+  loc.display()
 end
  
 function le() --left elbow turn
   turtle.turnLeft()
+  loc.left()
   df() --dig forward
+  loc.forward()
   turtle.turnLeft()
+  loc.left()
+  loc.display()
 end
  
 function maxDown() --Go down max distance
@@ -66,10 +82,14 @@ function maxDown() --Go down max distance
   while bottom == true do
     turtle.digDown()
     bottom = turtle.down()
+    loc.down()
+    loc.display()
     distance = distance + 1
   end
   for i=0,distance-3 do
     turtle.up()
+    loc.up()
+    loc.display()
   end
 end
  
