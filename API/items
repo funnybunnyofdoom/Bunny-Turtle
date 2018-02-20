@@ -1,0 +1,40 @@
+--This API handles items.
+--Please enter your config directory below
+configDirectory = '/config/itemLibrary.dat'
+
+function main()
+  checkFile()
+  add('bananas')
+  local arr2 = retrieve()
+  print(arr2[1])
+end
+
+function checkFile()
+  if not fs.exists(configDirectory) then
+    file = fs.open(configDirectory,'w')
+    file.close() 
+  end
+end
+
+function retrieve()
+  file = fs.open(configDirectory,'r')
+  local data = file.readAll()
+  file.close()
+  return textutils.unserialize(data)
+end
+
+function put(x)
+  local file = fs.open(configDirectory,'w')
+  file.write(textutils.serialize(x))
+  file.close() 
+end
+
+function add(x)
+  local arr = retrieve()
+  arr[#arr+1] = x 
+  put(arr)
+end
+
+
+
+main()
