@@ -1,0 +1,118 @@
+--This program will track the
+--whereabouts of the turtle as
+--it moves.
+local faceList = {"north","east","south","west"}
+
+function faceCheck(face)
+    if face == "north" or face == "south" or face == "west" or face == "east" then
+        return true
+    else
+        return false
+    end
+end
+
+function gpsSetup()
+    if fs.exists("/turtle/gpsConfig.cfg") == false then
+        local x,y,z = 0
+        while true do
+            print("What is your x?")
+            x = tonumber(io.read())
+            if type(x) == "number" then
+                break
+            end
+        end
+        while true do
+            print("What is your y?")
+            y = tonumber(io.read())
+            if type(y) == "number" then
+                break
+            end
+        end
+        while true do
+            print("What is your z?")
+            z = tonumber(io.read())
+            if type(z) == "number" then
+                break
+            end
+        end
+        while true do
+            print("What is the FACING of the turtle?")
+            f = string.lower(io.read())
+            if faceCheck(f) then
+                break
+            end
+        end
+        local table = {x,y,z,f}
+        local file = fs.open('/turtle/gpsConfig.cfg','w')
+        local data = textutils.serialize(table)
+        file.write(data)
+        file.close()    
+    end
+end
+
+function getGps()
+    local file = fs.open('/turtle/gpsConfig.cfg','r')
+    local data = file.readAll()
+    local table = textutils.unserialize(data)    
+    file.close()
+    return table
+end
+
+function setGps(X,Y,Z,F)
+    local o = getGps()
+    X = X or o[1]
+    Y = Y or o[2]
+    Z = Z or o[3]
+    F = F or o[4]
+    local Table = {X,Y,Z,F}
+    local file = fs.open("/turtle/gpsConfig.cfg",'w')
+    local data = textutils.serialise(Table)
+    file.write(data)
+    file.close()
+end
+
+function getFacing()
+    local faceTable = getGps()
+    return faceTable[4]
+end
+
+function setFacing(Face)
+    setGps(nil,nil,nil,Face)
+end
+
+local oldRight = turtle.turnRight
+local oldLeft = turtle.turnLeft
+local oldForward = turtle.forward
+local oldBack = turtle.back
+local oldDown = turtle.down
+local oldUp = turtle.up
+
+function turtle.forward()
+    oldForward()
+end
+
+function turtle.back()
+    oldBack()
+end
+
+function turtle.turnLeft()
+    oldLeft()
+end
+
+function turnRight()
+    oldRight()
+    local GF = getFacing()
+    if GF == "north" then
+        setFacing("east")
+    elseif GF == "east" then
+        setFacing("south") 
+    elseif GF == "south" then
+        setFacing("west")
+    elseif GF == "west" then
+        setFacing("north")    
+    end
+end
+
+gpsSetup()
+turnRight()
+print(getFacing())
