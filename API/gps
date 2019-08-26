@@ -96,30 +96,32 @@ function turtle.back()
 end
 
 function turtle.turnLeft()
-    oldLeft()
-    local GF = getFacing()
-    if GF == "north" then
-        setFacing("west")
-    elseif GF == "west" then
-        setFacing("south") 
-    elseif GF == "south" then
-        setFacing("east")
-    elseif GF == "east" then
-        setFacing("north")    
+    if oldLeft() then
+        local GF = getFacing()
+        if GF == "north" then
+            setFacing("west")
+        elseif GF == "west" then
+            setFacing("south") 
+        elseif GF == "south" then
+            setFacing("east")
+        elseif GF == "east" then
+            setFacing("north")
+        end
     end
 end
 
 function turnRight()
-    oldRight()
-    local GF = getFacing()
-    if GF == "north" then
-        setFacing("east")
-    elseif GF == "east" then
-        setFacing("south") 
-    elseif GF == "south" then
-        setFacing("west")
-    elseif GF == "west" then
-        setFacing("north")    
+    if oldRight() then
+        local GF = getFacing()
+        if GF == "north" then
+            setFacing("east")
+        elseif GF == "east" then
+            setFacing("south") 
+        elseif GF == "south" then
+            setFacing("west")
+        elseif GF == "west" then
+            setFacing("north")    
+        end
     end
 end
 
