@@ -3,7 +3,7 @@
 --it moves.
 local faceList = {"north","east","south","west"}
 
-function faceCheck(face)
+function faceCheck(face) --This checks to make sure 'face' is one of the accepted parameters
     if face == "north" or face == "south" or face == "west" or face == "east" then
         return true
     else
@@ -88,11 +88,41 @@ local oldDown = turtle.down
 local oldUp = turtle.up
 
 function turtle.forward()
-    oldForward()
+    if oldForward() then
+        local gpsTable = getGps()
+        local gpsX = gpsTable[1] --get x from file
+        local gpsZ = gpsTable[3] --get y from file
+        local gpsFacing = gpsTable[4] --get direction from file
+        if gpsFacing == "north" then
+            gpsZ = gpsZ -1
+        elseif gpsFacing == "east" then
+            gpsX = gpsX +1
+        elseif gpsFacing == "south" then
+            gpsZ = gpsZ +1
+        elseif gpsFacing == "west" then
+            gpsX = gpsX -1
+        end
+        setGps(gpsX,nil,gpsZ,gpsFacing)
+    end
 end
 
 function turtle.back()
-    oldBack()
+    if oldBack() then
+        local gpsTable = getGps()
+        local gpsX = gpsTable[1] --get x from file
+        local gpsZ = gpsTable[3] --get y from file
+        local gpsFacing = gpsTable[4] --get direction from file
+        if gpsFacing == "north" then
+            gpsZ = gpsZ +1
+        elseif gpsFacing == "east" then
+            gpsX = gpsX -1
+        elseif gpsFacing == "south" then
+            gpsZ = gpsZ -1
+        elseif gpsFacing == "west" then
+            gpsX = gpsX +1
+        end
+        setGps(gpsX,nil,gpsZ,gpsFacing)
+    end
 end
 
 function turtle.turnLeft()
