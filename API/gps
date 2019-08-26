@@ -140,7 +140,7 @@ function turtle.turnLeft()
     end
 end
 
-function turnRight()
+function turtle.turnRight()
     if oldRight() then
         local GF = getFacing()
         if GF == "north" then
@@ -152,6 +152,24 @@ function turnRight()
         elseif GF == "west" then
             setFacing("north")    
         end
+    end
+end
+
+function turtle.up()
+    if oldUp() then
+        local gpsTable = getGps()
+        local gpsY = gpsTable[2]
+        gpsY = gpsY + 1
+        setGps(nil,gpsY,nil,nil)
+    end
+end
+
+function turtle.down()
+    if oldDown() then
+        local gpsTable = getGps()
+        local gpsY = gpsTable[2]
+        gpsY = gpsY - 1
+        setGps(nil,gpsY,nil,nil)
     end
 end
 
