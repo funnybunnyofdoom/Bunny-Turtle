@@ -1,0 +1,49 @@
+--This program will dig the storage + formation
+--for the turtle storage system
+
+function getDrawers()
+    local dCount = 0
+    local space = 0
+    local item = {}
+    item = turtle.getItemDetail()
+    print(item)
+    --Here we should add a check to all inventory spaces
+    if item.name == "storagedrawers:basicdrawers" then
+        return item.count
+    else
+        return 0
+    end
+end
+
+function digStorage(height)
+    local height = height or 63
+    count = 0
+    storageNumber = 0
+    storageSpace = {}
+    for i=1,height,1 do
+        turtle.digDown()
+        turtle.down()
+            for u=1,4,1 do
+                turtle.dig()
+                
+                count = count + 1
+                print(count)
+                storageSpace[count] = "AIR"
+                if turtle.getItemDetail() then
+                    D = getDrawers()
+                    if D > 0 then
+                        turtle.place()
+                        storageSpace[count] = "EMPTY"
+                    end
+                end
+                turtle.turnRight()
+            end
+    end
+    file = fs.open('itemDB','w')
+    local comp = textutils.serialise(storageSpace)
+    file.write(comp)
+    file.close()
+    for o=1,height,1 do
+        turtle.up()
+    end
+end
