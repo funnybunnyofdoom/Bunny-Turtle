@@ -1,0 +1,45 @@
+--api to make windows
+--author: Funnybunnyofdoom
+
+function fullScreen(title)
+   local title = title or " "
+   local tX,tY = term.getSize()
+   term.setBackgroundColor(colors.lime)
+   term.clear()
+   for i=0,tX-1,1 do
+       term.setCursorPos(i,1)
+       term.setBackgroundColor(colors.lightGray)
+       term.write(' ')
+       term.setBackgroundColor(colors.black)
+   end
+   term.setBackgroundColor(colors.orange)
+   term.setTextColor(colors.gray)
+   term.setCursorPos(tX,1)
+   term.write('X')
+   term.setCursorPos(3,1)
+   term.setBackgroundColor(colors.lightGray)
+   term.setTextColor(colors.white)
+   term.write(title)
+   
+   term.setBackgroundColor(colors.black)
+   term.setTextColor(colors.white)
+end
+
+function exitButton(bX,bY)
+    bX = bX or 39
+    bY = bY or 1
+    --while true do
+        local event,button,x,y = os.pullEvent("mouse_click")
+        --print(x,y)
+        if x == bX and y == bY then
+        term.setBackgroundColor(colors.black)
+        term.setTextColor(colors.white)
+        term.clear()
+        term.setCursorPos(1,1)
+        return false
+        end
+    --end
+end
+
+--fullScreen()
+--exitButton(51,1)
