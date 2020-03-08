@@ -1,0 +1,242 @@
+--This program runs the interface for
+--interacting with the turtle.
+--Author: Funnybunnyofdoom
+local programName = "Bunny Turtle"
+ 
+ 
+--Create window
+windows.fullScreen(programName)
+term.setBackgroundColor(colors.lime)
+ 
+--Get Data:
+local fuel = turtle.getFuelLevel()
+local maxfuel = turtle.getFuelLimit()
+local refuelSlot = 1
+local refuelPerc = 100
+local refuelBool = false
+turtleName = os.getComputerLabel()
+local dX,dY,dZ = 2,2,1
+table = gps.getGps()
+local gX,gZ,gY,gF = table[1],table[2],table[3],table[4]
+gF = string.upper(gF) -- Upper case the facing
+local dock = {2790,581,67,'NORTH'}
+local docked = false
+ 
+local function fuelCalc()
+    local percent = 100 * (turtle.getFuelLevel()/turtle.getFuelLimit())
+    return math.floor(percent)
+end
+ 
+fuelPercent = fuelCalc()
+ 
+--Display Data:
+function display()
+fuelPercent = fuelCalc()
+term.setCursorPos(2,3)
+term.setBackgroundColor(colors.green)
+term.write("Name: "..turtleName)
+term.setCursorPos(2,5)
+term.setBackgroundColor(colors.green)
+term.write("fuel: ")
+for i=1,10,1 do
+    if fuelPercent > i*10 then
+        term.setBackgroundColor(colors.red)
+    else
+        term.setBackgroundColor(colors.black)
+    end
+    term.write("|")    
+end
+term.setBackgroundColor(colors.green)
+term.write(" "..fuelPercent.."%")
+term.setCursorPos(2,9)
+term.write("Refuel At:")
+term.setTextColor(colors.lightBlue)
+term.write("\17")
+term.setTextColor(colors.white)
+term.write(refuelPerc.."%")
+term.setCursorPos(17,9)
+term.setTextColor(colors.lightBlue)
+term.write('\16')
+term.setTextColor(colors.white)
+--Display Quarry Window
+term.setCursorPos(23,2)
+term.write(" Quarry Size ")
+term.setCursorPos(23,3)
+term.write("  Depth:     ")
+term.setCursorPos(23,4)
+term.write("  Length:    ")
+term.setCursorPos(23,5)
+term.write("  Width:     ")
+term.setCursorPos(23,6)
+term.write("             ")
+ 
+term.setCursorPos(32,3)
+term.setTextColor(colors.lightBlue)
+term.write('\17')
+term.setTextColor(colors.white)
+term.write(dZ)
+term.setTextColor(colors.lightBlue)
+term.setCursorPos(35,3)
+term.write('\16')
+term.setCursorPos(32,4)
+term.write('\17')
+term.setTextColor(colors.white)
+term.write(dY)
+term.setTextColor(colors.lightBlue)
+term.setCursorPos(35,4)
+term.write('\16')
+term.setCursorPos(32,5)
+term.write('\17')
+term.setTextColor(colors.white)
+term.write(dX)
+term.setTextColor(colors.lightBlue)
+term.setCursorPos(35,5)
+term.write('\16')
+term.setCursorPos(27,6)
+term.setBackgroundColor(colors.gray)
+term.setTextColor(colors.lightGray)
+term.write(" dig ")
+term.setTextColor(colors.white)
+--disply GPS
+ 
+GPS = window.create(term.current(),27,8,9,5)
+GPS.setBackgroundColor(colors.green)
+GPS.clear()
+GPS.setCursorPos(3,1)
+GPS.write(" GPS ")
+GPS.setCursorPos(3,2)
+GPS.write('X:'..gX)
+GPS.setCursorPos(3,3)
+GPS.write('Y:'..gY)
+GPS.setCursorPos(3,4)
+GPS.write('Z:'..gZ)
+GPS.setCursorPos(3,5)
+GPS.write('face:'..string.sub(gF,1,1))
+ 
+--Menu Button
+term.setCursorPos(1,1)
+term.setBackgroundColor(colors.lightGray)
+term.setTextColor(colors.gray)
+term.write("=")
+ 
+end
+ 
+function checkDock()
+    local X = gps.getGps()
+    if (X[1]==dock[1] and X[2]==dock[3]) and (X[3]==dock[2] and string.upper(X[4])==dock[4]) then
+        if refuelBool == true then
+            redstone.setAnalogOutput('front',15)
+        else
+            redstone.setAnalogOutput('front',0)
+        end
+    else
+        redstone.setAnalogOutput('front',0)
+    end
+end
+ 
+function switchSet()
+    term.setCursorPos(2,7)
+    term.setBackgroundColor(colors.green)
+    term.write("Auto-Refuel: ")
+    if refuelBool == false then
+        term.setBackgroundColor(colors.gray)
+        term.write(" ")
+        term.setBackgroundColor(colors.red)
+        term.write(" ")
+    else
+        term.setBackgroundColor(colors.white)
+        term.write(" ")
+        term.setBackgroundColor(colors.gray)
+        term.write(" ")
+    end
+    term.setBackgroundColor(colors.green)
+    term.write(" ")
+    term.setCursorPos(2,8)
+    term.setBackgroundColor(colors.green)
+    term.write("Fuel Slot: ")
+    term.setTextColor(colors.lightBlue)
+    term.write("\17")
+    term.setTextColor(colors.white)
+    term.write(refuelSlot.." ")
+    term.setCursorPos(16,8)
+    term.setTextColor(colors.lightBlue)
+    term.write("\16 ")
+    term.setTextColor(colors.white)
+end
+-- 15,7 16,7
+function menuBar()
+    bar = window.create(term.current(),1,2,5,1)
+    bar.setBackgroundColor(colors.lightGray)
+    bar.clear()
+    bar.write(" CMD")
+end
+ 
+ 
+term.setBackgroundColor(colors.lime)
+ 
+--Event Listener for the program
+switchSet()
+while true do
+    checkDock()
+    display()
+    event,b,x,y = os.pullEvent("mouse_click")
+    if x == 15 and y == 7 then
+        if refuelBool == true then
+            refuelBool = false
+        else
+            refuelBool = true
+        end
+        --switchSet()
+    elseif x == 16 and y == 7 then
+        if refuelBool == true then
+            refuelBool = false
+        else
+            refuelBool = true
+        end
+        --switchSet()
+    elseif x == 32 and y == 3 then
+        if dZ > 1 then
+            dZ = dZ - 1
+        end
+    elseif x == 35 and y == 3 then
+        dZ = dZ + 1
+    elseif x == 32 and y == 4 then
+        if dY > 2 then
+            dY = dY - 1
+        end
+    elseif x == 35 and y == 4 then
+        dY = dY + 1
+    elseif x == 32 and y == 5 then
+        if dX > 2 then
+            dX = dX - 1
+        end
+    elseif x == 35 and y == 5 then
+        dX = dX + 1
+    elseif x >= 29 and x <= 34 then
+        if y == 6 then
+            mine.quarry(dX,dY,dZ)
+        end
+       
+    --EXIT BUTTON VVV
+    elseif x == 39 and y == 1 then
+        term.setCursorPos(1,1)
+        term.setBackgroundColor(colors.black)
+        term.setTextColor(colors.white)
+        term.clear()
+        return true
+    elseif x == 1 and y == 1 then
+        menuBar()
+    end
+    switchSet()
+if fuelPercent < refuelPerc and refuelBool == true then
+    turtle.select(refuelSlot)
+    qty = turtle.getItemCount(refuelSlot)
+    turtle.refuel(qty)
+    end
+ 
+end
+ 
+ 
+ 
+--Option to close program (LAST LINE)
+--windows.exitButton()
