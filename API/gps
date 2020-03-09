@@ -64,7 +64,10 @@ function setGps(X,Y,Z,F)
     Y = Y or o[2]
     Z = Z or o[3]
     F = F or o[4]
-    local Table = {X,Y,Z,F}
+    T = turtle.inspectUp()
+    Fr = turtle.inspect()
+    B = turtle.inspectDown()
+    local Table = {X,Y,Z,F,T,Fr,B}
     local file = fs.open("/turtle/gpsConfig.cfg",'w')
     local data = textutils.serialise(Table)
     file.write(data)
