@@ -237,5 +237,3 @@ function turtle.goto(gx,gy,gz,gf)
 end
 
 gpsSetup() --This should be called from another program. Else, this will run when the API is loaded. is that bad?
-    end
-end
