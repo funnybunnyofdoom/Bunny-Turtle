@@ -173,14 +173,14 @@ function turtle.down()
     end
 end
 
-function turtle.leaveDock() --Always use this to leave the dock
-    turtle.forward()
-    turtle.forward()
-    turtle.forward()
-    for ii=0,20,1 do
-        turtle.up()
-    end
-end
+--function turtle.leaveDock() --Always use this to leave the dock
+--    turtle.forward()
+--    turtle.forward()
+--    turtle.forward()
+--    for ii=0,20,1 do
+--        turtle.up()
+--    end
+--end
 
 function turtle.goto(gx,gy,gz,gf)
     local g = {gx,gy,gz,gf}
