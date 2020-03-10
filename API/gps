@@ -46,7 +46,8 @@ function gpsSetup()
         local file = fs.open('/turtle/gpsConfig.cfg','w')
         local data = textutils.serialize(table)
         file.write(data)
-        file.close()    
+        file.close()
+        setGps()    
     end
 end
 
@@ -64,9 +65,12 @@ function setGps(X,Y,Z,F)
     Y = Y or o[2]
     Z = Z or o[3]
     F = F or o[4]
-    T = turtle.inspectUp()
-    Fr = turtle.inspect()
-    B = turtle.inspectDown()
+    b,T = turtle.inspectUp()
+    b,Fr = turtle.inspect()
+    b,B = turtle.inspectDown()
+    T = T.name
+    Fr = Fr.name
+    B = B.name
     local Table = {X,Y,Z,F,T,Fr,B}
     local file = fs.open("/turtle/gpsConfig.cfg",'w')
     local data = textutils.serialise(Table)
@@ -237,3 +241,22 @@ function turtle.goto(gx,gy,gz,gf)
 end
 
 gpsSetup() --This should be called from another program. Else, this will run when the API is loaded. is that bad?
+--check for turtle breakage
+local scan = getGps()
+
+b,aa = turtle.inspectUp()
+aa = aa.name
+b,bb = turtle.inspect()
+bb = bb.name
+b,cc = turtle.inspectDown()
+cc = cc.name
+if aa == scan[5] and (bb == scan[6] and cc == scan[7]) then
+    print(textutils.slowPrint("GPS ENABLED"))
+    os.sleep(0.5)
+else
+    print(textutils.slowPrint("Turtle Moved. Resetting GPS"))
+    fs.delete("/turtle/gpsConfig.cfg")
+    os.sleep(1)
+    gpsSetup()
+    --setGps()
+  end
