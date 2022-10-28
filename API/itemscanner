@@ -1,0 +1,30 @@
+--Author: FunnyBunnyofDOOM
+--Description: This program will check
+--each item in front of the turtle,
+--and if it doesn't already exist in
+--a list, it will add the item to
+--the list. There will be a property
+--for "Keep/don't keep"
+filepath = "/system/itemsystem/itemdata"
+ 
+function getItem(slot)
+    newItem = true
+    itemdata = turtle.getItemDetail(slot)
+    term.setCursorPos(5,5)
+     -- if(fs.exists(filepath)) then
+         file = fs.open("data","a")
+         
+         while (x = file.readLine()) do
+             if x == itemdata.name then 
+                 newItem = false
+             end
+          end
+         if newItem == true then 
+             file.write(itemdata) 
+         end
+         file.close()
+     --else
+     -- end
+end
+ 
+getItem(1) 
